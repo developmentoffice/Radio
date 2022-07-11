@@ -1,0 +1,43 @@
+#!/usr/bin/liquidsoap
+
+settings.init.allow_root.set(true)
+settings.init.daemon.pidfile.path.set("/radio/tmp/liquidsoap")
+log.file.path.set("/radio/logs/radio.log")
+
+def source_tag(s, tag)
+    def f(_)
+        [("source_tag", (tag:string))]
+    end
+    metadata.map(id=tag, insert_missing=true, f, s)
+end
+
+def transition(a, b)
+    if a.metadata["source_tag"] != "music" or b.metadata["source_tag"] != "music" then
+        sequence([a.source, b.source])
+    else
+        cross.smart(a, b)
+    end
+end
+
+src_music = playlist("/radio/sounds/music/playlist.m3u")
+src_jingles = playlist("/radio/sounds/jingles/playlist.m3u")
+src_clock = single("/radio/sounds/clock/clock.wav")
+src_fallback = single("/radio/sounds/security/security.mp3")
+
+src_music = source_tag(src_music, "music")
+src_jingles = source_tag(src_jingles, "jingles")
+
+radio = rotate(weights = [1, 3], [src_jingles, src_music])
+radio = add([radio, switch([({0m0s}, src_clock)])])
+radio = cross(duration=5., transition, radio)
+radio = fallback(track_sensitive = false, [radio, src_fallback])
+
+output.icecast(
+    %ffmpeg(format="mp3", %audio(codec="libmp3lame", b="192k")),
+    encoding="UTF-8",
+    host = "localhost",
+    port = 8000,
+    password = "source",
+    mount = "radio",
+    radio
+)

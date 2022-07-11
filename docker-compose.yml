@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+    radio-system:
+        image: ubuntu:20.04
+        container_name: radio-system
+        ports:
+            - "4780:8000"
+        volumes:
+            - ./radio:/radio
+        networks:
+            - radio-network
+        command: tail -f /dev/null
+networks:
+    radio-network:
