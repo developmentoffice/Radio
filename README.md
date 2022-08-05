@@ -29,3 +29,5 @@ docker exec -it radio-system bash
 12. For stop playing use `docker exec radio-system /radio/scripts/stop.sh`
 
 13. For stop icecast server use `docker exec radio-system /radio/scripts/stop-server.sh`
+
+14. Statistics `docker exec radio-system /radio/scripts/statistics.sh`
