@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ -z $1 || ($1 != "music" && $1 != "jingles") ]]
+if [[ -z $1 || ($1 != "music" && $1 != "ny" && $1 != "jingles") ]]
 then
-    echo "Usage: ./playlist.sh (music|jingles)"
+    echo "Usage: ./playlist.sh (music|ny|jingles)"
     exit 1
 fi
 
