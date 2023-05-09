@@ -7,6 +7,9 @@ then
 fi
 
 case "$1" in
+    9may)
+        ls -1 /radio/sounds/music/9may/*.mp3 > /radio/sounds/music/playlist.m3u
+    ;;
     ny)
         ls -1 /radio/sounds/music/NY/*.mp3 > /radio/sounds/music/playlist.m3u
     ;;
