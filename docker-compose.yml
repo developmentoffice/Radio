@@ -1,4 +1,3 @@
-version: "3.9"
 services:
     radio-system:
         image: ubuntu:20.04
